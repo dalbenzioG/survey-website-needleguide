@@ -10,17 +10,18 @@ function doPost(e) {
     // Log the parsed data
     Logger.log("Parsed data:", data);
 
-    // Flatten the data structure
+    const trainingLevelResolved =
+      data.demographics.trainingLevel === "Other"
+        ? data.demographics.trainingLevelOther || ""
+        : data.demographics.trainingLevel || "";
+
+    // Flatten the data structure (demographics: ID, training level when Other uses free text)
     const row = [
-      data.timestamp, // timestamp
-      data.demographics.initials,
-      data.demographics.specialty,
-      data.demographics.otherSpecialty,
-      data.demographics.trainingStatus,
-      data.demographics.otherTrainingStatus,
-      data.demographics.experience,
-      data.demographics.used3DSlicer,
-      data.demographics.slicerFamiliarity,
+      data.timestamp,
+      data.demographics.participantId || "",
+      trainingLevelResolved,
+      data.demographics.ultrasoundExperienceYears || "",
+      data.demographics.needlePlacementsEstimate || "",
       // SUS questions
       data.sus.q1 || "",
       data.sus.q2 || "",
@@ -32,27 +33,29 @@ function doPost(e) {
       data.sus.q8 || "",
       data.sus.q9 || "",
       data.sus.q10 || "",
-      // NASA-TLX without depth guide
-      data.nasaTlx.withoutDepthGuide[0] || 0,
-      data.nasaTlx.withoutDepthGuide[1] || 0,
-      data.nasaTlx.withoutDepthGuide[2] || 0,
-      data.nasaTlx.withoutDepthGuide[3] || 0,
-      data.nasaTlx.withoutDepthGuide[4] || 0,
-      data.nasaTlx.withoutDepthGuide[5] || 0,
-      // NASA-TLX with depth guide
-      data.nasaTlx.withDepthGuide[0] || 0,
-      data.nasaTlx.withDepthGuide[1] || 0,
-      data.nasaTlx.withDepthGuide[2] || 0,
-      data.nasaTlx.withDepthGuide[3] || 0,
-      data.nasaTlx.withDepthGuide[4] || 0,
-      data.nasaTlx.withDepthGuide[5] || 0,
-      // General Feedback
-      data.generalFeedback.depthGuideUsefulness || 0,
-      data.generalFeedback.shortcutsHelp || "",
-      data.generalFeedback.shortcutsComments || "",
-      data.generalFeedback.iconsLayoutClarity || 0,
-      data.generalFeedback.responsiveness || 0,
-      data.generalFeedback.overallFeedback || "",
+      // NASA-TLX: Freehand technique (6 subscales)
+      data.nasaTlx.freehand[0] || 0,
+      data.nasaTlx.freehand[1] || 0,
+      data.nasaTlx.freehand[2] || 0,
+      data.nasaTlx.freehand[3] || 0,
+      data.nasaTlx.freehand[4] || 0,
+      data.nasaTlx.freehand[5] || 0,
+      // NASA-TLX: In-plane guide
+      data.nasaTlx.inPlaneGuide[0] || 0,
+      data.nasaTlx.inPlaneGuide[1] || 0,
+      data.nasaTlx.inPlaneGuide[2] || 0,
+      data.nasaTlx.inPlaneGuide[3] || 0,
+      data.nasaTlx.inPlaneGuide[4] || 0,
+      data.nasaTlx.inPlaneGuide[5] || 0,
+      // Post-session evaluation
+      data.generalFeedback.preferredTechnique || "",
+      data.generalFeedback.preferredTechniqueWhy || "",
+      data.generalFeedback.mostAccuratePosteriorCalyx || "",
+      data.generalFeedback.mostAccuratePosteriorCalyxWhy || "",
+      data.generalFeedback.clinicalChoice || "",
+      data.generalFeedback.clinicalChoiceWhy || "",
+      data.generalFeedback.easeLearnNeedleGuide || "",
+      data.generalFeedback.trainingRequiredBeforeClinical || "",
     ];
 
     // Add the row to the sheet

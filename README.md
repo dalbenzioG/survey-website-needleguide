@@ -2,6 +2,10 @@
 
 Hey there! 👋 This guide will walk you through creating your own survey website from scratch. It's like building with LEGO blocks - we'll go step by step, and you'll have a working survey site at the end!
 
+## Acknowledgments
+
+This app was built using the template provided by the brilliant **[Maha](https://github.com/MahaK21)** on GitHub: [https://github.com/MahaK21/survey-website](https://github.com/MahaK21/survey-website).
+
 ## What You'll Build
 
 A beautiful, multi-step survey website that:

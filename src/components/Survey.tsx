@@ -15,7 +15,7 @@ import NasaTLX from './sections/NasaTLX';
 import GeneralFeedback from './sections/GeneralFeedback';
 import { submitToGoogleSheets } from '../services/googleSheets';
 
-const steps = ['Demographics', 'System Usability Scale', 'NASA-TLX', 'General Feedback'];
+const steps = ['Demographics', 'SUS — Needle Guidance', 'NASA-TLX', 'Post-Session Evaluation'];
 
 const Survey: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -23,27 +23,26 @@ const Survey: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     demographics: {
-      initials: '',
-      specialty: '',
-      otherSpecialty: '',
-      trainingStatus: '',
-      otherTrainingStatus: '',
-      experience: '',
-      used3DSlicer: '',
-      slicerFamiliarity: 0,
+      participantId: '',
+      trainingLevel: '',
+      trainingLevelOther: '',
+      ultrasoundExperienceYears: '',
+      needlePlacementsEstimate: '',
     },
     sus: {},
     nasaTlx: {
-      withDepthGuide: Array(6).fill(0),
-      withoutDepthGuide: Array(6).fill(0),
+      freehand: Array(6).fill(0),
+      inPlaneGuide: Array(6).fill(0),
     },
     generalFeedback: {
-      depthGuideUsefulness: 0,
-      shortcutsHelp: '',
-      shortcutsComments: '',
-      iconsLayoutClarity: 0,
-      responsiveness: 0,
-      overallFeedback: '',
+      preferredTechnique: '',
+      preferredTechniqueWhy: '',
+      mostAccuratePosteriorCalyx: '',
+      mostAccuratePosteriorCalyxWhy: '',
+      clinicalChoice: '',
+      clinicalChoiceWhy: '',
+      easeLearnNeedleGuide: '',
+      trainingRequiredBeforeClinical: '',
     },
   });
 
@@ -133,7 +132,7 @@ const Survey: React.FC = () => {
         {/* Introduction Block */}
         <Box sx={{ mb: 4 }}>
           <Typography variant="h4" gutterBottom align="center">
-            User Survey
+            US Needle Guidance Study in Senegal
           </Typography>
         </Box>
         {/* Show description only on first page */}

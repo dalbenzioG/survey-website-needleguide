@@ -7,24 +7,46 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Slider,
 } from '@mui/material';
 
-interface DemographicsData {
-  initials: string;
-  specialty: string;
-  otherSpecialty: string;
-  trainingStatus: string;
-  otherTrainingStatus: string;
-  experience: string;
-  used3DSlicer: string;
-  slicerFamiliarity: number;
+export interface DemographicsData {
+  participantId: string;
+  trainingLevel: string;
+  trainingLevelOther: string;
+  ultrasoundExperienceYears: string;
+  needlePlacementsEstimate: string;
 }
 
 interface DemographicsProps {
   onDataChange: (data: DemographicsData) => void;
   initialData: DemographicsData;
 }
+
+const TRAINING_LEVELS = [
+  'MS1',
+  'MS2',
+  'MS3',
+  'MS4',
+  'PGY-1',
+  'PGY-2',
+  'PGY-3',
+  'PGY-4',
+  'Fellowship-1',
+  'Fellowship-2',
+  'Attending Surgeon',
+  'MD, research/industry role',
+  'Other',
+] as const;
+
+const ULTRASOUND_EXPERIENCE = [
+  'None',
+  '<1 year',
+  '1–2 years',
+  '3–5 years',
+  '>5 years',
+] as const;
+
+const NEEDLE_PLACEMENTS = ['None', '1–10', '11–50', '51–100', '>100'] as const;
 
 const Demographics: React.FC<DemographicsProps> = ({ onDataChange, initialData }) => {
   const [formData, setFormData] = useState<DemographicsData>(initialData);
@@ -33,161 +55,97 @@ const Demographics: React.FC<DemographicsProps> = ({ onDataChange, initialData }
     onDataChange(formData);
   }, [formData, onDataChange]);
 
-  const handleChange = (field: string) => (event: any) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: event.target.value,
-    }));
-  };
-
-  const handleSliderChange = (_: Event, newValue: number | number[]) => {
-    const rawValue = Array.isArray(newValue) ? newValue[0] : newValue;
-    setFormData(prev => ({
-      ...prev,
-      slicerFamiliarity: rawValue + 1, // Convert 0-4 to 1-5
-    }));
-  };
+  const handleChange =
+    (field: keyof DemographicsData) => (event: { target: { value: string } }) => {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: event.target.value,
+      }));
+    };
 
   return (
     <Box>
-      <Typography variant="h5" gutterBottom>
-        Section 1: Participant Background
+      <Typography variant="body1" sx={{ mb: 3 }}>
+        This study investigates whether low-cost needle guidance systems improve performance in
+        ultrasound-guided needle placement for nephrostomy procedures, compared to conventional
+        freehand techniques.
+      </Typography>
+
+      <Typography variant="h5" gutterBottom sx={{ mb: 2 }}>
+        Participant Demographics &amp; Experience
       </Typography>
 
       <TextField
         fullWidth
-        label="Initials"
-        value={formData.initials}
-        onChange={handleChange('initials')}
+        label="Participant ID"
+        value={formData.participantId}
+        onChange={handleChange('participantId')}
         sx={{ mb: 3 }}
         required
       />
 
-      <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel>1. What is your clinical specialty?</InputLabel>
+      <FormControl fullWidth sx={{ mb: 3 }} required>
+        <InputLabel id="training-level-label">Training Level</InputLabel>
         <Select
-          value={formData.specialty}
-          label="1. What is your clinical specialty?"
-          onChange={handleChange('specialty')}
-          required
+          labelId="training-level-label"
+          value={formData.trainingLevel}
+          label="Training Level"
+          onChange={handleChange('trainingLevel')}
         >
-          <MenuItem value="Radiology">Radiology</MenuItem>
-          <MenuItem value="Cardiology">Cardiology</MenuItem>
-          <MenuItem value="Emergency Medicine">Emergency Medicine</MenuItem>
-          <MenuItem value="Other">Other</MenuItem>
+          {TRAINING_LEVELS.map((level) => (
+            <MenuItem key={level} value={level}>
+              {level}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
 
-      {formData.specialty === 'Other' && (
+      {formData.trainingLevel === 'Other' && (
         <TextField
           fullWidth
-          label="Please specify your specialty"
-          value={formData.otherSpecialty}
-          onChange={handleChange('otherSpecialty')}
+          label="Please specify training level"
+          value={formData.trainingLevelOther}
+          onChange={handleChange('trainingLevelOther')}
           sx={{ mb: 3 }}
           required
         />
       )}
 
-      <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel>Training Status</InputLabel>
+      <FormControl fullWidth sx={{ mb: 3 }} required>
+        <InputLabel id="us-experience-label">Years of Experience with Ultrasound</InputLabel>
         <Select
-          value={formData.trainingStatus}
-          label="Training Status"
-          onChange={handleChange('trainingStatus')}
-          required
+          labelId="us-experience-label"
+          value={formData.ultrasoundExperienceYears}
+          label="Years of Experience with Ultrasound"
+          onChange={handleChange('ultrasoundExperienceYears')}
         >
-          <MenuItem value="Medical Student">Medical Student</MenuItem>
-          <MenuItem value="Resident">Resident</MenuItem>
-          <MenuItem value="Fellow">Fellow</MenuItem>
-          <MenuItem value="Attending">Attending</MenuItem>
-          <MenuItem value="Other">Other</MenuItem>
+          {ULTRASOUND_EXPERIENCE.map((opt) => (
+            <MenuItem key={opt} value={opt}>
+              {opt}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
 
-      {formData.trainingStatus === 'Other' && (
-        <TextField
-          fullWidth
-          label="Please specify your training status"
-          value={formData.otherTrainingStatus}
-          onChange={handleChange('otherTrainingStatus')}
-          sx={{ mb: 3 }}
-          required
-        />
-      )}
-
-      <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel>2. How much experience do you have with lung ultrasound?</InputLabel>
+      <FormControl fullWidth sx={{ mb: 3 }} required>
+        <InputLabel id="needle-placements-label">
+          Estimated Number of Ultrasound-Guided Needle Placements Performed
+        </InputLabel>
         <Select
-          value={formData.experience}
-          label="2. How much experience do you have with lung ultrasound?"
-          onChange={handleChange('experience')}
-          required
+          labelId="needle-placements-label"
+          value={formData.needlePlacementsEstimate}
+          label="Estimated Number of Ultrasound-Guided Needle Placements Performed"
+          onChange={handleChange('needlePlacementsEstimate')}
         >
-          <MenuItem value="not_familiar">Not familiar at all</MenuItem>
-          <MenuItem value="minimal">Very minimal/introductory or somewhat familiar</MenuItem>
-          <MenuItem value="familiar">Very familiar (regular exposure)</MenuItem>
+          {NEEDLE_PLACEMENTS.map((opt) => (
+            <MenuItem key={opt} value={opt}>
+              {opt}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
-
-      <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel>3. Have you used 3D Slicer or similar annotation tools before?</InputLabel>
-        <Select
-          value={formData.used3DSlicer}
-          label="3. Have you used 3D Slicer or similar annotation tools before?"
-          onChange={handleChange('used3DSlicer')}
-          required
-        >
-          <MenuItem value="yes">Yes</MenuItem>
-          <MenuItem value="no">No</MenuItem>
-        </Select>
-      </FormControl>
-
-      {formData.used3DSlicer === 'yes' && (
-        <Box sx={{ mb: 3 }}>
-          <Typography id="slicer-familiarity-slider" gutterBottom>
-            4. How familiar were you with the 3D Slicer software before participating in this study?
-          </Typography>
-          <Box sx={{ px: 2 }}>
-            <Slider
-              value={formData.slicerFamiliarity - 1} // Convert 1-5 to 0-4 for display
-              onChange={handleSliderChange}
-              aria-labelledby="slicer-familiarity-slider"
-              valueLabelDisplay="auto"
-              step={1}
-              marks={[
-                { value: 0, label: 'Not Familiar' },
-                { value: 1, label: 'Slightly Familiar' },
-                { value: 2, label: 'Moderately Familiar' },
-                { value: 3, label: 'Very Familiar' },
-                { value: 4, label: 'Extremely Familiar' },
-              ]}
-              min={0}
-              max={4}
-              sx={{
-                '& .MuiSlider-markLabel': {
-                  fontSize: '0.75rem',
-                  transform: 'translateX(-50%)',
-                  whiteSpace: 'nowrap',
-                },
-                '& .MuiSlider-markLabel[data-index="0"]': {
-                  transform: 'translateX(0)',
-                },
-                '& .MuiSlider-markLabel[data-index="4"]': {
-                  transform: 'translateX(-100%)',
-                },
-                '& .MuiSlider-mark': {
-                  width: '2px',
-                  height: '8px',
-                  backgroundColor: 'currentColor',
-                },
-              }}
-            />
-          </Box>
-        </Box>
-      )}
     </Box>
   );
 };
 
-export default Demographics; 
+export default Demographics;

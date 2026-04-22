@@ -37,55 +37,56 @@ const SystemUsabilityScale: React.FC<SystemUsabilityScaleProps> = ({ onDataChang
   const questions = [
     {
       id: 'q1',
-      text: 'I think that I would like to use this system frequently.',
+      text: 'I think that I would like to use needle guidance frequently.',
     },
     {
       id: 'q2',
-      text: 'I found the system unnecessarily complex.',
+      text: 'I found needle guidance unnecessarily complex.',
       explanation: 'e.g., too many steps, hard to understand',
     },
     {
       id: 'q3',
-      text: 'I thought the system was easy to use.',
+      text: 'I thought needle guidance was easy to use.',
     },
     {
       id: 'q4',
-      text: 'I think that I would need the support of a technical person to be able to use this system.',
+      text: 'I think that I would need the support of a technical person to be able to use needle guidance.',
     },
     {
       id: 'q5',
-      text: 'I found the various functions in this system were well integrated.',
+      text: 'I found the various aspects of needle guidance were well integrated.',
     },
     {
       id: 'q6',
-      text: 'I thought there was too much inconsistency in this system.',
+      text: 'I thought there was too much inconsistency in needle guidance.',
     },
     {
       id: 'q7',
-      text: 'I would imagine that most people would learn to use this system very quickly.',
+      text: 'I would imagine that most people would learn to use needle guidance very quickly.',
     },
     {
       id: 'q8',
-      text: 'I found the system very cumbersome to use.',
+      text: 'I found needle guidance very cumbersome to use.',
       explanation: 'e.g., awkward, slow, or tedious to operate',
     },
     {
       id: 'q9',
-      text: 'I felt very confident using the system.',
+      text: 'I felt very confident using needle guidance.',
     },
     {
       id: 'q10',
-      text: 'I needed to learn a lot of things before I could get going with this system.',
+      text: 'I needed to learn a lot of things before I could get going with needle guidance.',
     },
   ];
 
   return (
     <>
       <Typography variant="h5" gutterBottom>
-        Section 2: System Usability Scale (SUS)
+        Section 2: System Usability Scale (SUS) — Needle Guidance
       </Typography>
       <Typography variant="body1" paragraph>
-        Please indicate your level of agreement with the following statements about the system you just used.
+        Please indicate your level of agreement with the following statements about the needle guidance you
+        just used.
       </Typography>
 
       <TableContainer component={Paper}>

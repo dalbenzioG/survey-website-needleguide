@@ -1,26 +1,25 @@
 interface SurveyResponse {
     demographics: {
-      initials: string;
-      specialty: string;
-      otherSpecialty: string;
-      trainingStatus: string;
-      otherTrainingStatus: string;
-      experience: string;
-      used3DSlicer: string;
-      slicerFamiliarity: number;
+      participantId: string;
+      trainingLevel: string;
+      trainingLevelOther: string;
+      ultrasoundExperienceYears: string;
+      needlePlacementsEstimate: string;
     };
     sus: { [key: string]: string };
     nasaTlx: {
-      withDepthGuide: number[];
-      withoutDepthGuide: number[];
+      freehand: number[];
+      inPlaneGuide: number[];
     };
     generalFeedback: {
-      depthGuideUsefulness: number;
-      shortcutsHelp: string;
-      shortcutsComments: string;
-      iconsLayoutClarity: number;
-      responsiveness: number;
-      overallFeedback: string;
+      preferredTechnique: string;
+      preferredTechniqueWhy: string;
+      mostAccuratePosteriorCalyx: string;
+      mostAccuratePosteriorCalyxWhy: string;
+      clinicalChoice: string;
+      clinicalChoiceWhy: string;
+      easeLearnNeedleGuide: string;
+      trainingRequiredBeforeClinical: string;
     };
     timestamp: string;
   }
@@ -29,7 +28,7 @@ interface SurveyResponse {
     try {
       console.log('Submitting survey data:', data);
       
-      const response = await fetch('https://script.google.com/macros/s/AKfycbwqa26Bcq3uMtsoulboLOUKNiIXtKYh3VzY55YfsUkhMknSuNzMWw9gXbxmQTZwOTX1/exec', {
+      const response = await fetch('https://script.google.com/macros/s/AKfycbwSE4VKN7OpfTSLyRXMkdRZ9s8jwwKeFcSmZlLmNmNCOjXr5BHtb9K6CTq2oqQXEAsH/exec', {
         method: 'POST',
         mode: 'no-cors',
         headers: {
